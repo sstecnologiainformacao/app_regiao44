@@ -53,7 +53,7 @@ export default defineType({
       to: [{ type: 'category' }],
     }),
     defineField({
-      name: 'array',
+      name: 'products',
       title: 'Produtos',
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'product' }] }],

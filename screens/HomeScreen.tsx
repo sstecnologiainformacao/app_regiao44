@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -16,15 +16,33 @@ import {
 } from "react-native-heroicons/outline";
 import Categories from "../components/Categories";
 import FeatureRow from "../components/FeatureRow";
+import sanityClient from "../sanity";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-
+  const [featuredCategories, setFeaturedCategories] = useState([]);
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
+
+  useEffect(() => {
+    sanityClient.fetch(`
+    *[_type == 'featured'] {
+      ...,
+      stores[]->{
+        ...,
+        array[]->{
+          ...
+        }
+      }
+    }`).then((data) => {
+      setFeaturedCategories(data);
+    });
+  });
+
+  console.log(featuredCategories);
 
   return (
     <SafeAreaView className="bg-white pt-14">
