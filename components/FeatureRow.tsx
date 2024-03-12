@@ -3,7 +3,7 @@ import { View, Text, ScrollView } from "react-native";
 import { ArrowRightIcon } from "react-native-heroicons/outline";
 import StoreCard from "./StoreCard";
 
-const FeatureRow = ({ title, description, id }) => {
+const FeatureRow = ({ title, description, id, stores }) => {
   return (
     <View>
       <View className="mt-4 flex-row items-center justify-between px-4">
@@ -19,83 +19,21 @@ const FeatureRow = ({ title, description, id }) => {
         }}
         className="pt-4"
       >
-        <StoreCard
-          imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-          title="Testing"
-          rating={4.5}
-          genre="Testing"
-          address="Testing"
-          shortDescription="Testing"
-          products={[]}
-          long={0}
-          lat={0}
-        />
-        <StoreCard
-          imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-          title="Testing"
-          rating={4.5}
-          genre="Testing"
-          address="Testing"
-          shortDescription="Testing"
-          products={[]}
-          long={0}
-          lat={0}
-        />
-        <StoreCard
-          imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-          title="Testing"
-          rating={4.5}
-          genre="Testing"
-          address="Testing"
-          shortDescription="Testing"
-          products={[]}
-          long={0}
-          lat={0}
-        />
-        <StoreCard
-          imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-          title="Testing"
-          rating={4.5}
-          genre="Testing"
-          address="Testing"
-          shortDescription="Testing"
-          products={[]}
-          long={0}
-          lat={0}
-        />
-        <StoreCard
-          imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-          title="Testing"
-          rating={4.5}
-          genre="Testing"
-          address="Testing"
-          shortDescription="Testing"
-          products={[]}
-          long={0}
-          lat={0}
-        />
-        <StoreCard
-          imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-          title="Testing"
-          rating={4.5}
-          genre="Testing"
-          address="Testing"
-          shortDescription="Testing"
-          products={[]}
-          long={0}
-          lat={0}
-        />
-        <StoreCard
-          imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-          title="Testing"
-          rating={4.5}
-          genre="Testing"
-          address="Testing"
-          shortDescription="Testing"
-          products={[]}
-          long={0}
-          lat={0}
-        />
+        {stores.map((store) => (
+          <StoreCard
+            id={store._id}
+            key={store._id}
+            imgUrl={store.image}
+            title={store.name}
+            rating={store.rating}
+            genre={store.genre}
+            address={store.address}
+            shortDescription={store.shortDescription}
+            products={store.products}
+            long={store.long}
+            lat={store.lat}
+          />
+        ))}
       </ScrollView>
     </View>
   );

@@ -40,9 +40,7 @@ const HomeScreen = () => {
     }`).then((data) => {
       setFeaturedCategories(data);
     });
-  });
-
-  console.log(featuredCategories);
+  }, []);
 
   return (
     <SafeAreaView className="bg-white pt-14">
@@ -81,21 +79,15 @@ const HomeScreen = () => {
         >
           <Categories />
 
-          <FeatureRow
-            title="Ofertas do dia"
-            description="Aproveite as ofertas do dia"
-            id="ofertas"
-          />
-          <FeatureRow
-            title="Novidades"
-            description="Confira as novidades"
-            id="novidades"
-          />
-          <FeatureRow
-            title="Mais vendidos"
-            description="Confira os mais vendidos"
-            id="mais-vendidos"
-          />
+          {featuredCategories?.map((category) => (
+            <FeatureRow
+              title={category.name}
+              description={category.short_description}
+              id={category._id}
+              key={category._id}
+              stores={category.stores}
+            />
+          ))}
         </ScrollView>
       </View>
     </SafeAreaView>
