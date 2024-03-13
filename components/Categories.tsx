@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import CategoryCard from "./CategoryCard";
+import sanityClient from "../sanity";
 
 const Categories = () => {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    sanityClient
+      .fetch(
+        `
+    *[_type == 'category'] `
+      )
+      .then((data) => {
+        setCategories(data);
+      });
+  }, []);
+
   return (
     <ScrollView
       horizontal
@@ -12,34 +26,13 @@ const Categories = () => {
         paddingTop: 10,
       }}
     >
-      <CategoryCard
-        imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-        title="Category"
-      />
-      <CategoryCard
-        imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-        title="Category"
-      />
-      <CategoryCard
-        imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-        title="Category"
-      />
-      <CategoryCard
-        imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-        title="Category"
-      />
-      <CategoryCard
-        imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-        title="Category"
-      />
-      <CategoryCard
-        imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-        title="Category"
-      />
-      <CategoryCard
-        imgUrl="https://www.intotheminds.com/blog/app/uploads/pricing.jpg"
-        title="Category"
-      />
+      {categories.map((category, index) => (
+        <CategoryCard
+          key={category._id}
+          title={category.title}
+          index={index}
+        />
+      ))}
     </ScrollView>
   );
 };
