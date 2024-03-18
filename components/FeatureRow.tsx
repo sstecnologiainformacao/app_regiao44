@@ -28,7 +28,7 @@ const FeatureRow = ({ title, description, id, stores }) => {
             rating={store.rating}
             genre={store.genre}
             address={store.address}
-            shortDescription={store.shortDescription}
+            shortDescription={store.short_description}
             products={store.products}
             long={store.long}
             lat={store.lat}

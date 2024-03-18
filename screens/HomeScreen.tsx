@@ -33,7 +33,7 @@ const HomeScreen = () => {
       ...,
       stores[]->{
         ...,
-        array[]->{
+        products[]->{
           ...
         }
       }
