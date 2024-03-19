@@ -1,11 +1,25 @@
-import React, { useState }  from 'react';
+import { useState }  from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import Currency from 'react-currency-formatter'
 import { urlFor } from '../sanity';
 import { MinusCircleIcon, PlusCircleIcon } from 'react-native-heroicons/outline';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToBasket, selectBasketItemsById, removeFromBasket } from '../features/basketSlice';
 
 const ProductCard = ({ id, name, description, price, image }) => {
     const [isPressed, setIsPressed] = useState(false);
+    const dispatch = useDispatch();
+    const items = useSelector(state => selectBasketItemsById(state, id));
+
+    const options = { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 3 }
+    const formatNumber = new Intl.NumberFormat('pt-BR', options);
+
+    const addItemToBasket = () => {
+        dispatch(addToBasket({ id, name, description, price, image }))
+    }
+
+    const removeItemToBasket = () => {
+        dispatch(removeFromBasket({ id }))
+    }
 
     return (
         <>
@@ -15,7 +29,7 @@ const ProductCard = ({ id, name, description, price, image }) => {
                         <Text className="text-lg mb-1">{name}</Text>
                         <Text className="text-gray-400">{description}</Text>
                         <Text className="text-gray-400 mt-2">
-                            <Currency quantity={price} currency="BRL" />
+                            {formatNumber.format(price)}
                         </Text>
                     </View>
                     <View>
@@ -29,14 +43,14 @@ const ProductCard = ({ id, name, description, price, image }) => {
             {isPressed && (
                 <View className='bg-white px-4'>
                     <View className='flex-row items-center space-x-2 pb-3'>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={removeItemToBasket}>
                             <MinusCircleIcon 
                                 color={'#00ccbb'}
                                 size={40}
                             />
                         </TouchableOpacity>
-                        <Text>0</Text>
-                        <TouchableOpacity>
+                        <Text>{items ? items.length : 0}</Text>
+                        <TouchableOpacity onPress={addItemToBasket}>
                             <PlusCircleIcon
                                 color={'#00ccbb'}
                                 size={40}
