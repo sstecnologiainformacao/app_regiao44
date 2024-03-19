@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    items: [],
+  items: [],
 };
 
 export const basketSlice = createSlice({
@@ -9,21 +9,30 @@ export const basketSlice = createSlice({
   initialState,
   reducers: {
     addToBasket: (state, action) => {
-      state.items = [...state.items, action.payload]
+      const itemReference = state.items.find((item) => item.id === action.payload.id);
+      if (itemReference) {
+        itemReference.quantity += 1;
+      } else {
+        state.items = [...state.items, { ...action.payload, quantity: 1 }]
+      }
     },
     removeFromBasket: (state, action) => {
-      state.items = state.items.filter((item) => item.id !== action.payload.id);
+      const itemReference = state.items.find((item) => item.id === action.payload.id);
+      if (itemReference && itemReference.quantity > 1) {
+        itemReference.quantity -= 1;
+      } else {
+        state.items = state.items.filter((item) => item.id !== action.payload.id);
+      }
     },
   },
 })
 
-// Action creators are generated for each case reducer function
 export const { addToBasket, removeFromBasket } = basketSlice.actions;
 
 export const selectBasketItems = (state) => state.basket.items;
 
 export const selectBasketItemsById = (state, id) => {
-  return state.basket.items.filter((item) => item.id === id);
+  return state.basket.items.find((item) => item.id === id);
 };
 
 export default basketSlice.reducer

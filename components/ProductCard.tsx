@@ -43,13 +43,13 @@ const ProductCard = ({ id, name, description, price, image }) => {
             {isPressed && (
                 <View className='bg-white px-4'>
                     <View className='flex-row items-center space-x-2 pb-3'>
-                        <TouchableOpacity onPress={removeItemToBasket}>
+                        <TouchableOpacity onPress={removeItemToBasket} disabled={!items || !items?.quantity}>
                             <MinusCircleIcon 
-                                color={'#00ccbb'}
+                                color={items && items.quantity > 0 ? '#00ccbb' : 'gray'}
                                 size={40}
                             />
                         </TouchableOpacity>
-                        <Text>{items ? items.length : 0}</Text>
+                        <Text>{items ? items.quantity : 0}</Text>
                         <TouchableOpacity onPress={addItemToBasket}>
                             <PlusCircleIcon
                                 color={'#00ccbb'}
