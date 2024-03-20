@@ -9,7 +9,7 @@ export const basketSlice = createSlice({
   initialState,
   reducers: {
     addToBasket: (state, action) => {
-      const itemReference = state.items.find((item) => item.id === action.payload.id);
+      const itemReference = state.items.find((item) => item.id === action.payload.id && item.storeId === action.payload.storeId);
       if (itemReference) {
         itemReference.quantity += 1;
       } else {
@@ -17,11 +17,9 @@ export const basketSlice = createSlice({
       }
     },
     removeFromBasket: (state, action) => {
-      const itemReference = state.items.find((item) => item.id === action.payload.id);
-      if (itemReference && itemReference.quantity > 1) {
+      const itemReference = state.items.find((item) => item.id === action.payload.id && item.storeId === action.payload.storeId);
+      if (itemReference && itemReference.quantity > 0) {
         itemReference.quantity -= 1;
-      } else {
-        state.items = state.items.filter((item) => item.id !== action.payload.id);
       }
     },
   },
@@ -34,5 +32,25 @@ export const selectBasketItems = (state) => state.basket.items;
 export const selectBasketItemsById = (state, id) => {
   return state.basket.items.find((item) => item.id === id);
 };
+
+export const selectBasketByStore = (state, storeId) => {
+  return state.basket.items.filter((item) => item.storeId === storeId);
+}
+
+export const selectStores = (state) => {
+  const addedStores = [];
+  return state.basket.items.reduce((stores, item) => {
+    if (!addedStores.includes(item.storeId)) {
+      const { storeId, storeName } = item;
+      stores.push({ id: storeId, name: storeName });
+      addedStores.push(storeId);
+    }
+    return stores;
+  }, []);
+}
+
+export const selectBasketQuantity = (state) => state.basket.items.reduce((total, item) => total + item.quantity, 0);
+
+export const selectBasketTotal = (state) => state.basket.items.reduce((total, item) => total + item.price * item.quantity, 0);
 
 export default basketSlice.reducer
