@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { createSelector } from 'reselect';
 
 const initialState = {
   items: [],
@@ -18,8 +19,11 @@ export const basketSlice = createSlice({
     },
     removeFromBasket: (state, action) => {
       const itemReference = state.items.find((item) => item.id === action.payload.id && item.storeId === action.payload.storeId);
-      if (itemReference && itemReference.quantity > 0) {
+      console.log(state);
+      if (itemReference && itemReference.quantity > 1) {
         itemReference.quantity -= 1;
+      } else {
+        state.items = state.items.filter((item) => item.id !== action.payload.id);
       }
     },
   },
@@ -33,21 +37,27 @@ export const selectBasketItemsById = (state, id) => {
   return state.basket.items.find((item) => item.id === id);
 };
 
-export const selectBasketByStore = (state, storeId) => {
-  return state.basket.items.filter((item) => item.storeId === storeId);
-}
+const selectBasket = state => state.basket;
 
-export const selectStores = (state) => {
-  const addedStores = [];
-  return state.basket.items.reduce((stores, item) => {
-    if (!addedStores.includes(item.storeId)) {
-      const { storeId, storeName } = item;
-      stores.push({ id: storeId, name: storeName });
-      addedStores.push(storeId);
-    }
-    return stores;
-  }, []);
-}
+export const selectBasketByStore = createSelector(
+  [selectBasket, (_, storeId) => storeId],
+  (basket, storeId) => basket.items.filter(item => item.storeId === storeId)
+);
+
+export const selectStores = createSelector(
+  [selectBasket],
+  basket => {
+    const addedStores = [];
+    return basket.items.reduce((stores, item) => {
+      if (!addedStores.includes(item.storeId)) {
+        const { storeId, storeName } = item;
+        stores.push({ id: storeId, name: storeName });
+        addedStores.push(storeId);
+      }
+      return stores;
+    }, []);
+  }
+);
 
 export const selectBasketQuantity = (state) => state.basket.items.reduce((total, item) => total + item.quantity, 0);
 

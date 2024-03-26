@@ -1,9 +1,10 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { selectStores } from '../features/basketSlice';
 import { useNavigation } from '@react-navigation/native';
 import { XCircleIcon } from 'react-native-heroicons/outline';
+import BasketStore from '../components/BasketStore';
 
 const BasketScreen = () => {
     const stores = useSelector(state => selectStores(state));
@@ -21,13 +22,10 @@ const BasketScreen = () => {
                 </TouchableOpacity>
             </View>
             {stores.map(store => (
-                <View className='flex-1 bg-gray-100'>
-                    <View className='p-5 border-t border-[#00CCBB] bg-white shadow-xs'>
-                        <View>
-                            <Text className='text-center text-gray-400'> {store.name}</Text>
-                        </View>
-                    </View>
-                </View>
+                <BasketStore
+                    store={store}
+                    key={store.id}
+                />
             ))}
         </SafeAreaView>
     )
